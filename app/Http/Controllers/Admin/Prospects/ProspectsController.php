@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin\Prospects;
 
 use App\Models\Prospect;
 use Illuminate\Http\Request;
+use Livewire\WithPagination;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Prospect\StoreProspectRequest;
 
 class ProspectsController extends Controller
 {
@@ -15,7 +17,8 @@ class ProspectsController extends Controller
      */
     public function index()
     {
-       return view('admin.prospects.index', ['prospects' => Prospect::latest()->paginate(10)]);
+        $prospects = Prospect::latest()->paginate(10);
+       return view('admin.prospects.index', ['prospects' => $prospects ]);
     }
 
     /**
@@ -25,7 +28,7 @@ class ProspectsController extends Controller
      */
     public function create()
     {
-        //
+      return view('admin.prospects.create');
     }
 
     /**
@@ -34,9 +37,17 @@ class ProspectsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProspectRequest $request)
     {
-        //
+
+        $prospect = Prospect::create($request->only('name', 'email'));
+
+       if($request->hasFile('profile_image')) {
+           $path = $request->profile_image->store('public/prospects/profile/images');
+           $prospect->update(['profile_image' => $path]);
+       }
+
+       return redirect()->route('admin.prospects.dashboard')->with('success', 'Successfully created a new Prospect');
     }
 
     /**
@@ -56,9 +67,9 @@ class ProspectsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Prospect $prospect)
     {
-        //
+        return view('admin.prospects.edit', compact('prospect'));
     }
 
     /**

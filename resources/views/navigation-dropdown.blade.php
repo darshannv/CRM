@@ -16,6 +16,33 @@
                         {{ __('Dashboard') }}
                     </x-jet-nav-link>
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                  <x-jet-dropdown align="center" width="48" >
+                <x-slot name="trigger">
+                <x-jet-nav-link href="#">
+                    {{ __('Manage Prospects') }}
+                </x-jet-nav-link>
+                </x-slot>
+                     <x-slot name="content">
+                     <div class="block px-4 py-2 text-xs text-gray-400">
+                            {{ __('Manage Account') }}
+                        </div>
+
+                        <x-jet-dropdown-link href="{{ route('admin.prospects.dashboard') }}" :active="request()->routeIs('dashboard')">
+                            {{ __('Dashboard') }}
+                        </x-jet-dropdown-link>
+
+                        <x-jet-dropdown-link href="{{ route('admin.prospects.create') }}" :active="request()->routeIs('create')">
+                            {{ __('Create Prospect') }}
+                        </x-jet-dropdown-link>
+
+                        <x-jet-dropdown-link href="#">
+                            {{ __('Something else here') }}
+                        </x-jet-dropdown-link>
+                     </x-slot>
+                </x-jet-dropdown>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
@@ -120,6 +147,10 @@
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link>
+
+            <x-jet-responsive-nav-link href="{{ route('admin.prospects.dashboard') }}" :active="request()->routeIs('dashboard')">
+                {{ __('Show Prospect') }}
+            </x-jet-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -135,13 +166,15 @@
                 </div>
             </div>
 
+
+           
             <div class="mt-3 space-y-1">
                 <!-- Account Management -->
                 <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
                     {{ __('Profile') }}
                 </x-jet-responsive-nav-link>
 
-               
+             
 
                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                     <x-jet-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
